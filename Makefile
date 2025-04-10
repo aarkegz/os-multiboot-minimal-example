@@ -1,22 +1,32 @@
-OUTPUT_DIR 	:= build/
-KERNEL_BIN 	:= $(OUTPUT_DIR)kernel.bin
-KERNEL_ELF 	:= $(OUTPUT_DIR)kernel.elf
-SOURCE 		:= multiboot.S
-LINKER_SCRIPT 	:= linker.lds
+OUTPUT_DIR	:= build/
+KERNEL_BIN	:= $(OUTPUT_DIR)kernel.bin
+KERNEL_ELF	:= $(OUTPUT_DIR)kernel.elf
+SOURCE		:= multiboot.S
+LINKER_SCRIPT	:= linker.lds
 
-LD		 	?= ld
-AS		 	?= as
-CC		 	?= gcc
-OBJCOPY 	?= objcopy
-OBJDUMP 	?= objdump
+# Function to set variable if it has 'default' origin
+# Usage: $(call set_if_default,VARIABLE,VALUE)
+define set_if_default
+$(if $(filter default,$(origin $(1))),$(eval $(1) = $(2)))
+endef
+
+PREFIX		?=
+OBJCOPY		?= $(PREFIX)objcopy
+OBJDUMP		?= $(PREFIX)objdump
 GDB			?= gdb
+
+ifneq ($(PREFIX),) # if PREFIX is set
+  $(call set_if_default,LD,$(PREFIX)ld)
+  $(call set_if_default,AS,$(PREFIX)as)
+  $(call set_if_default,CC,$(PREFIX)gcc)
+endif
 
 # AS_FLAGS 	?= -march=i386
 
-QEMU       			?= qemu-system-x86_64
-QEMU_FLAGS 			?= -m 256M -smp 1 -nographic
-QEMU_DEBUG_PORT 	?= 1234
-QEMU_DEBUG_FLAGS 	?= -S -gdb tcp::$(QEMU_DEBUG_PORT)
+QEMU				?= qemu-system-x86_64
+QEMU_FLAGS			?= -m 256M -smp 1 -nographic
+QEMU_DEBUG_PORT		?= 1234
+QEMU_DEBUG_FLAGS	?= -S -gdb tcp::$(QEMU_DEBUG_PORT)
 
 .PHONY: run, build, just_run, debug, disasm, clean
 run: build just_run
@@ -24,7 +34,7 @@ run: build just_run
 build: $(KERNEL_BIN)
 
 just_run:
-	$(QEMU) $(QEMU_FLAGS) -kernel $(KERNEL_ELF)
+	$(QEMU) $(QEMU_FLAGS) -kernel $(KERNEL_BIN)
 
 debug: build
 	$(QEMU) $(QEMU_FLAGS) $(QEMU_DEBUG_FLAGS) -kernel $(KERNEL_ELF) &
