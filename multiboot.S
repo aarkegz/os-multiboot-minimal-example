@@ -42,6 +42,11 @@ entry32:
     # 4. Enter the long mode if needed
     # 5. Go to the C/C++/Rust/... kernel entry point
 
+    # Shutdown QEMU
+    mov     $0x604, %dx
+    mov     $0x2000, %ax
+    out     %ax, (%dx)
+ 
     hlt
 
 .section .data
