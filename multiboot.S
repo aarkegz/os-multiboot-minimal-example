@@ -49,7 +49,7 @@ entry32:
  
     hlt
 
-.section .data
+.section .data.boot
 .type message, @object
 message:
     .asciz  "\nHello, World!\n"

@@ -37,7 +37,7 @@ just_run:
 	$(QEMU) $(QEMU_FLAGS) -kernel $(KERNEL_BIN)
 
 debug: build
-	$(QEMU) $(QEMU_FLAGS) $(QEMU_DEBUG_FLAGS) -kernel $(KERNEL_ELF) &
+	$(QEMU) $(QEMU_FLAGS) $(QEMU_DEBUG_FLAGS) -kernel $(KERNEL_BIN) &
 	$(GDB) -ex "target remote localhost:$(QEMU_DEBUG_PORT)" -ex "symbol-file $(KERNEL_ELF)"
 
 disasm: $(KERNEL_ELF)
