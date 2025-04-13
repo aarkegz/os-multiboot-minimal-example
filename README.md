@@ -14,6 +14,17 @@ The bootloader will locate the Multiboot header and load the kernel into memory 
 
 ## About this example
 
-This example demonstrates how to create a minimal Multiboot-compliant kernel that can be loaded by a bootloader. The kernel is written in pure assembly, and it is even shorter than this README file. It simply prints "Hello, World!" to the screen and then halts the CPU.
+This example demonstrates how to create a minimal Multiboot-compliant kernel that can be loaded by a bootloader. The kernel is written in pure assembly, and it is even shorter than this README file. It simply prints "Hello, World!" to the screen and then shuts down the system.
+
+Usage:
+
+```bash
+$ make                              # Build then run
+$ make clean                        # Clean up
+$ make build                        # Build only
+$ make PREFIX=x86_64-linux-musl-    # Make with custom toolchain
+$ make disasm                       # Disassemble the kernel
+$ make debug                        # Debug the kernel
+```
 
 The example is designed to be as simple as possible, while still being a valid Multiboot kernel. Anyone who is familiar with assembly language and the compiler toolchain should be able to understand it. The example is also designed to be easily extensible, so you can add your own code and features as needed, or use it as a starting point for your own projects.
